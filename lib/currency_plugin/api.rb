@@ -7,15 +7,20 @@ module Killbill
   module CurrencyPlugin
     class DefaultPlugin < Killbill::Plugin::Currency
 
-      def start_plugin
-        super
-      end
-
       def initialize()
         @raise_exception = false
         super()
       end
 
+
+      def start_plugin
+        super
+      end
+
+      # return DB connections to the Pool if required
+      def after_request
+        ActiveRecord::Base.connection.close
+      end
 
       def get_base_currencies(options = {})
         return ['USD']
