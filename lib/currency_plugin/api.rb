@@ -1,7 +1,9 @@
-require 'date'
+require 'time'
 
-require 'killbill/currency'
+require 'killbill'
 
+require 'currency_plugin/models/currency_rate'
+require 'currency_plugin/models/currency_update'
 
 module Killbill
   module CurrencyPlugin
@@ -23,34 +25,55 @@ module Killbill
       end
 
       def get_base_currencies(options = {})
-        return ['USD']
+        (Killbill::CurrencyPlugin::CurrencyUpdate.distinct_base_currencies || []).map do |c|
+          c.base_currency
+        end
       end
 
       def get_latest_conversion_date(base_currency, options = {})
-        return Time.now
+        res = Killbill::CurrencyPlugin::CurrencyUpdate.latest_base_currency(base_currency)
+        res[0].conversion_date.utc unless res.size == 0
       end
 
       def get_conversion_dates(base_currency, options = {})
-        return [Time.now]
+        (Killbill::CurrencyPlugin::CurrencyUpdate.historical_base_currencies(base_currency) || []).map do |r|
+          r.conversion_date.utc
+        end
       end
 
       def get_current_rates(base_currency, options = {})
-        rate = Killbill::Plugin::Model::Rate.new()
-        rate.base_currency = base_currency
-        rate.currency = 'BRL'
-        rate.value = 12.3
-        rate.conversion_date = Time.now
-        return [rate]
+
+        base_latest = Killbill::CurrencyPlugin::CurrencyUpdate.latest_base_currency(base_currency)
+        if base_latest.nil? || base_latest.size == 0
+          return []
+        end
+
+        get_rates_for_currency_update(base_latest[0].id, base_currency, base_latest[0].conversion_date)
       end
 
       def get_rates(base_currency, conversion_date, options = {})
-        rate = Killbill::Plugin::Model::Rate.new()
-        rate.base_currency = base_currency
-        rate.currency = 'BRL'
-        rate.value = 12.3
-        rate.conversion_date = Time.now
-        return [rate]
+
+        (Killbill::CurrencyPlugin::CurrencyUpdate.historical_base_currencies(base_currency) || []).each do |e|
+          if Time.at(e.conversion_date) <= Time.at(conversion_date)
+            return get_rates_for_currency_update(e.id, base_currency, e.conversion_date)
+          end
+        end
+        []
       end
+
+      private
+
+      def get_rates_for_currency_update(currency_update_id, base_currency, conversion_date)
+        (Killbill::CurrencyPlugin::CurrencyRate.latest_rates_for_base_currency(currency_update_id) || []).map do |r|
+          rate = Killbill::Plugin::Model::Rate.new
+          rate.base_currency = base_currency
+          rate.currency = r.target_currency
+          rate.value = r.rate
+          rate.conversion_date = conversion_date
+          rate
+        end
+      end
+
     end
   end
 end
