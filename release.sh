@@ -15,11 +15,11 @@ rake release
 echo "Building artifact"
 rake killbill:package
 
-ARTIFACT="$PWD/pkg/killbill-payment-test-$VERSION.tar.gz"
+ARTIFACT="$PWD/pkg/killbill-currency-plugin-$VERSION.tar.gz"
 echo "Pushing $ARTIFACT to Maven Central"
 mvn gpg:sign-and-deploy-file \
     -DgroupId=com.ning.killbill.ruby \
-    -DartifactId=payment-test-plugin \
+    -DartifactId=killbill-currency-plugin \
     -Dversion=$VERSION \
     -Dpackaging=tar.gz \
     -DrepositoryId=ossrh-releases \
