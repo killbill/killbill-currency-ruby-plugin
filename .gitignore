@@ -12,6 +12,8 @@ test/tmp
 test/version_tmp
 tmp
 build
+test.db
+killbill-currency-plugin*
 # YARD artifacts
 .yardoc
 _yardoc
