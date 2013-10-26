@@ -6,7 +6,7 @@ CREATE TABLE `currency_updates` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_base_currency` (`base_currency`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;;
 
 CREATE TABLE `currency_rates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -17,4 +17,4 @@ CREATE TABLE `currency_rates` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_currency_update_id` (`currency_update_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;;
