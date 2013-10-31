@@ -9,6 +9,23 @@ module Killbill
   module CurrencyPlugin
     class DefaultPlugin < Killbill::Plugin::Currency
 
+
+      def self.initialize!(conf_dir=File.expand_path('../../../', File.dirname(__FILE__)))
+
+        config_file = "#{conf_dir}/currency.yml"
+
+        @@config = Killbill::CurrencyPlugin::Properties.new(config_file)
+        @@config.parse!
+
+        if defined?(JRUBY_VERSION)
+          # See https://github.com/jruby/activerecord-jdbc-adapter/issues/302
+          require 'jdbc/mysql'
+          Jdbc::MySQL.load_driver(:require) if Jdbc::MySQL.respond_to?(:load_driver)
+        end
+
+        ActiveRecord::Base.establish_connection(@@config[:database])
+      end
+
       def initialize()
         @raise_exception = false
         super()
@@ -17,6 +34,7 @@ module Killbill
 
       def start_plugin
         super
+        DefaultPlugin.initialize! @conf_dir
       end
 
       # return DB connections to the Pool if required
