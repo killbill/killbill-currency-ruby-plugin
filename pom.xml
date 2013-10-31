@@ -25,7 +25,7 @@
     <groupId>com.ning.killbill.ruby</groupId>
     <artifactId>killbill-currency-plugin</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>killbill-currency-plugin</name>
     <description></description>
     <scm>
