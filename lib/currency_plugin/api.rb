@@ -10,7 +10,7 @@ module Killbill
     class DefaultPlugin < Killbill::Plugin::Currency
 
 
-      def self.initialize!(conf_dir=File.expand_path('../../../', File.dirname(__FILE__)))
+      def self.initialize!(conf_dir=File.expand_path('../../', File.dirname(__FILE__)))
 
         config_file = "#{conf_dir}/currency.yml"
 
