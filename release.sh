@@ -31,7 +31,7 @@ rake killbill:package
 ARTIFACT="$PWD/pkg/killbill-currency-plugin-$VERSION.tar.gz"
 echo "Pushing $ARTIFACT to Maven Central"
 mvn gpg:sign-and-deploy-file \
-    -DgroupId=org.kill-bill.ruby \
+    -DgroupId=org.kill-bill.billing.plugin.ruby \
     -DartifactId=killbill-currency-plugin \
     -Dversion=$VERSION \
     -Dpackaging=tar.gz \
