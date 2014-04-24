@@ -22,17 +22,17 @@ Gem::Specification.new do |s|
 
   s.rdoc_options << '--exclude' << '.'
 
-  s.add_dependency 'killbill', '~> 3.0.0'
-  s.add_dependency 'activerecord', '~> 3.2.1'
+  s.add_dependency 'killbill', '~> 3.1.0'
+  s.add_dependency 'activerecord', '~> 4.1.0'
   if defined?(JRUBY_VERSION)
-    s.add_dependency 'activerecord-jdbcmysql-adapter', '~> 1.2.9'
+    s.add_dependency 'activerecord-jdbcmysql-adapter', '~> 1.3.7'
   end
 
   s.add_development_dependency 'jbundler', '~> 0.4.1'
   s.add_development_dependency 'rake', '>= 10.0.0'
   s.add_development_dependency 'rspec', '~> 2.12.0'
   if defined?(JRUBY_VERSION)
-    s.add_development_dependency 'activerecord-jdbcsqlite3-adapter', '~> 1.2.6'
+    s.add_development_dependency 'activerecord-jdbcsqlite3-adapter', '~> 1.3.7'
   else
     s.add_development_dependency 'sqlite3', '~> 1.3.7'
   end
