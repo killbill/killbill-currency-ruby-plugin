@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.author   = 'Kill Bill core team'
   s.email    = 'killbilling-users@googlegroups.com'
-  s.homepage = 'http://kill-bill.org'
+  s.homepage = 'http://killbill.io'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -22,17 +22,19 @@ Gem::Specification.new do |s|
 
   s.rdoc_options << '--exclude' << '.'
 
-  s.add_dependency 'killbill', '~> 3.1.1'
+  s.add_dependency 'killbill', '~> 4.0.0'
   s.add_dependency 'activerecord', '~> 4.1.0'
   if defined?(JRUBY_VERSION)
-    s.add_dependency 'activerecord-jdbcmysql-adapter', '~> 1.3.7'
+    s.add_dependency 'activerecord-bogacs', '~> 0.3'
+    s.add_dependency 'activerecord-jdbc-adapter', '~> 1.3'
   end
 
-  s.add_development_dependency 'jbundler', '~> 0.4.1'
+  s.add_development_dependency 'jbundler', '~> 0.4.3'
   s.add_development_dependency 'rake', '>= 10.0.0'
   s.add_development_dependency 'rspec', '~> 2.12.0'
   if defined?(JRUBY_VERSION)
-    s.add_development_dependency 'activerecord-jdbcsqlite3-adapter', '~> 1.3.7'
+    s.add_development_dependency 'jdbc-sqlite3', '~> 3.7'
+    s.add_development_dependency 'jdbc-mariadb', '~> 1.1'
   else
     s.add_development_dependency 'sqlite3', '~> 1.3.7'
   end

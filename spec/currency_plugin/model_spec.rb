@@ -38,7 +38,6 @@ describe Killbill::CurrencyPlugin::CurrencyUpdate do
     Killbill::CurrencyPlugin::CurrencyUpdate.create :base_currency => 'BRL',
                                                     :conversion_date => d3
 
-
     eur_historical = Killbill::CurrencyPlugin::CurrencyUpdate.historical_base_currencies('EUR')
     eur_historical.size.should == 3
     Time.at(eur_historical[0].conversion_date).should == Time.at(d2)
@@ -51,7 +50,7 @@ describe Killbill::CurrencyPlugin::CurrencyUpdate do
     Time.at(eur_latest[0].conversion_date).should == Time.at(d2)
 
     distinct_base_currencies = Killbill::CurrencyPlugin::CurrencyUpdate.distinct_base_currencies
-    distinct_base_currencies.size.should == 3
+    distinct_base_currencies.count.should == 3
     distinct_base_currencies.each_with_index do |c, i|
       c.base_currency.should == 'BRL' if i == 0
       c.base_currency.should == 'EUR' if i == 1
