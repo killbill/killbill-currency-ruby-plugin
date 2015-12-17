@@ -10,4 +10,4 @@ Kill Bill compatibility
 
 | Plugin version | Kill Bill version |
 | -------------: | ----------------: |
-| 0.0.0          | 0.14.z            |
+| 2.0.0          | 0.16.z            |

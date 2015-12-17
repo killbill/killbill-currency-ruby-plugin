@@ -22,14 +22,14 @@ Gem::Specification.new do |s|
 
   s.rdoc_options << '--exclude' << '.'
 
-  s.add_dependency 'killbill', '~> 4.0.0'
+  s.add_dependency 'killbill', '~> 7.0'
   s.add_dependency 'activerecord', '~> 4.1.0'
   if defined?(JRUBY_VERSION)
     s.add_dependency 'activerecord-bogacs', '~> 0.3'
     s.add_dependency 'activerecord-jdbc-adapter', '~> 1.3'
   end
 
-  s.add_development_dependency 'jbundler', '~> 0.4.3'
+  s.add_development_dependency 'jbundler', '~> 0.9.2'
   s.add_development_dependency 'rake', '>= 10.0.0'
   s.add_development_dependency 'rspec', '~> 2.12.0'
   if defined?(JRUBY_VERSION)
