@@ -6,5 +6,4 @@ require 'yaml'
 
 require 'killbill'
 
-require 'currency_plugin/properties'
 require 'currency_plugin/api'

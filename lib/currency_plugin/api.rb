@@ -9,32 +9,25 @@ module Killbill
   module CurrencyPlugin
     class DefaultPlugin < Killbill::Plugin::Currency
 
+      def self.initialize!
+        require 'active_record'
+        require 'active_record/bogacs'
+        require 'arjdbc'
 
-      def self.initialize!(conf_dir=File.expand_path('../../', File.dirname(__FILE__)))
-
-        config_file = "#{conf_dir}/currency.yml"
-
-        @@config = Killbill::CurrencyPlugin::Properties.new(config_file)
-        @@config.parse!
-
-        if defined?(JRUBY_VERSION)
-          # See https://github.com/jruby/activerecord-jdbc-adapter/issues/302
-          require 'jdbc/mysql'
-          Jdbc::MySQL.load_driver(:require) if Jdbc::MySQL.respond_to?(:load_driver)
-        end
-
-        ActiveRecord::Base.establish_connection(@@config[:database])
+        ::ActiveRecord::ConnectionAdapters::ConnectionHandler.connection_pool_class = ::ActiveRecord::Bogacs::FalsePool
+        db_config = {
+            :adapter              => :mysql,
+            # See KillbillActivator#KILLBILL_OSGI_JDBC_JNDI_NAME
+            :data_source          => Java::JavaxNaming::InitialContext.new.lookup('killbill/osgi/jdbc'),
+            # Since AR-JDBC 1.4, to disable session configuration
+            :configure_connection => false
+        }
+        ActiveRecord::Base.establish_connection(db_config)
       end
-
-      def initialize()
-        @raise_exception = false
-        super()
-      end
-
 
       def start_plugin
         super
-        DefaultPlugin.initialize! @conf_dir
+        DefaultPlugin.initialize!
       end
 
       # return DB connections to the Pool if required
@@ -60,7 +53,6 @@ module Killbill
       end
 
       def get_current_rates(base_currency, options = {})
-
         base_latest = Killbill::CurrencyPlugin::CurrencyUpdate.latest_base_currency(base_currency)
         if base_latest.nil? || base_latest.size == 0
           return []
@@ -70,7 +62,6 @@ module Killbill
       end
 
       def get_rates(base_currency, conversion_date, options = {})
-
         (Killbill::CurrencyPlugin::CurrencyUpdate.historical_base_currencies(base_currency) || []).each do |e|
           if Time.at(e.conversion_date) <= Time.at(conversion_date)
             return get_rates_for_currency_update(e.id, base_currency, e.conversion_date)
